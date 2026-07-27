@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inter-Department Badminton League</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:#f0fdf4;background-image:radial-gradient(circle at 15% 10%,rgba(52,211,153,.09) 0%,transparent 55%),radial-gradient(circle at 85% 90%,rgba(16,185,129,.07) 0%,transparent 55%);min-height:100vh;color:#1a2e1a;}
+.fd{font-family:'Syne',sans-serif;}
+.nav-tab{padding:.55rem 1rem;font-family:'Syne',sans-serif;font-weight:600;font-size:.78rem;letter-spacing:.04em;color:#4b7c5f;border-radius:10px;transition:all .2s;cursor:pointer;white-space:nowrap;border:none;background:transparent;}
+.nav-tab:hover{color:#059669;background:rgba(16,185,129,.08);}
+.nav-tab.active{background:linear-gradient(135deg,#059669,#10b981);color:#fff;box-shadow:0 4px 14px rgba(16,185,129,.35);}
+.card{background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(0,0,0,.06),0 4px 20px rgba(0,0,0,.04);border:1px solid rgba(167,243,208,.4);}
+.metric-card{background:#fff;border-radius:20px;padding:1.3rem 1.5rem;border:1px solid rgba(167,243,208,.5);box-shadow:0 2px 12px rgba(0,0,0,.05);position:relative;overflow:hidden;}
+.metric-card::before{content:'';position:absolute;top:-28px;right:-28px;width:80px;height:80px;border-radius:50%;opacity:.07;}
+.metric-card.g::before{background:#059669;}.metric-card.t::before{background:#0d9488;}.metric-card.l::before{background:#65a30d;}.metric-card.m::before{background:#34d399;}
+.progress-bar{height:10px;background:#dcfce7;border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#10b981,#34d399);border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+.itab{padding:.4rem .9rem;font-family:'Syne',sans-serif;font-weight:600;font-size:.76rem;letter-spacing:.03em;border-radius:8px;cursor:pointer;transition:all .18s;color:#6b7280;border:none;background:transparent;}
+.itab.active{background:#059669;color:#fff;}.itab:not(.active):hover{background:#f0fdf4;color:#059669;}
+.badge-w{display:inline-flex;align-items:center;gap:3px;background:#fef3c7;color:#92400e;border:1px solid #fde68a;border-radius:99px;font-size:.68rem;font-weight:600;padding:2px 7px;}
+.badge-ok{display:inline-flex;align-items:center;gap:3px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;border-radius:99px;font-size:.68rem;font-weight:600;padding:2px 7px;}
+.badge-sub{display:inline-flex;align-items:center;gap:3px;background:#ede9fe;color:#6d28d9;border:1px solid #ddd6fe;border-radius:99px;font-size:.68rem;font-weight:600;padding:2px 7px;}
+.badge-edit{display:inline-flex;align-items:center;gap:3px;background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;border-radius:99px;font-size:.68rem;font-weight:600;padding:2px 7px;cursor:pointer;}
+.lb1{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:12px;padding:.95rem 1.1rem;font-size:1rem;min-height:56px;}
+.lb2{background:linear-gradient(135deg,#f8fafc,#f1f5f9);border:1px solid #e2e8f0;border-radius:10px;padding:.75rem 1.1rem;font-size:.93rem;min-height:48px;}
+.lb3{background:linear-gradient(135deg,#fef9f0,#fef3e2);border:1px solid #fde8c0;border-radius:9px;padding:.6rem 1.1rem;font-size:.88rem;min-height:42px;}
+.lbn{background:#fff;border:1px solid #f0fdf4;border-radius:8px;padding:.45rem 1.1rem;font-size:.82rem;min-height:36px;}
+.fi{width:100%;padding:.5rem .85rem;border:1.5px solid #d1fae5;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.86rem;background:#f0fdf4;color:#1a2e1a;outline:none;transition:border-color .18s,box-shadow .18s;}
+.fi:focus{border-color:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.12);background:#fff;}
+.fi-sm{padding:.35rem .65rem;font-size:.79rem;}
+select.fi{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
+.btn{border:none;border-radius:10px;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;}
+.btn-p{background:linear-gradient(135deg,#059669,#10b981);color:#fff;padding:.5rem 1.2rem;font-size:.82rem;box-shadow:0 2px 8px rgba(16,185,129,.3);}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(16,185,129,.4);}
+.btn-s{background:#fff;color:#059669;border:1.5px solid #a7f3d0;padding:.45rem 1rem;font-size:.8rem;}
+.btn-s:hover{background:#f0fdf4;border-color:#10b981;}
+.btn-w{background:#fff;color:#d97706;border:1.5px solid #fde68a;padding:.45rem 1rem;font-size:.8rem;}
+.btn-w:hover{background:#fffbeb;}
+.btn-d{background:#fee2e2;color:#dc2626;border:1.5px solid #fca5a5;padding:.45rem 1rem;font-size:.8rem;}
+.btn-d:hover{background:#fecaca;}
+.btn-sm{padding:.3rem .75rem;font-size:.74rem;border-radius:8px;}
+.btn-xs{padding:.2rem .5rem;font-size:.67rem;border-radius:6px;}
+.match-card{background:#fff;border:1px solid #d1fae5;border-radius:12px;padding:.85rem 1rem;transition:box-shadow .18s;}
+.match-card:hover{box-shadow:0 4px 16px rgba(16,185,129,.1);}
+.match-card.done{border-color:#bbf7d0;background:#f0fdf4;}
+.match-card.partial{border-color:#fde68a;background:#fffdf0;}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(5px);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.modal-box{background:#fff;border-radius:20px;padding:1.6rem;width:100%;max-width:520px;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:mIn .22s ease;max-height:90vh;overflow-y:auto;}
+@keyframes mIn{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.toggle{position:relative;width:42px;height:22px;background:#d1fae5;border-radius:99px;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.toggle.on{background:#059669;}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:transform .2s;}
+.toggle.on::after{transform:translateX(20px);}
+.section{animation:fadeUp .28s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-thumb{background:#a7f3d0;border-radius:99px;}
+.player-slot{display:flex;gap:5px;align-items:center;padding:4px 7px;border-radius:8px;border:1.5px solid #d1fae5;background:#f9fffe;}
+.player-slot.filled{border-color:#bbf7d0;background:#f0fdf4;}
+.player-slot.sub-slot{border-color:#ddd6fe;background:#faf5ff;}
+.slot-lbl{font-family:'Syne',sans-serif;font-weight:700;font-size:.7rem;min-width:20px;}
+.slot-lbl.must{color:#059669;}.slot-lbl.sub{color:#7c3aed;}
+.wk-hdr{background:linear-gradient(135deg,#059669,#10b981);color:#fff;border-radius:12px;padding:.55rem 1rem;font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;}
+.court-lbl{font-size:.63rem;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:5px;white-space:nowrap;}
+.c-b1{background:#dcfce7;color:#166534;}.c-b2{background:#bbf7d0;color:#065f46;}
+.c-a1{background:#dbeafe;color:#1e40af;}.c-a2{background:#ede9fe;color:#5b21b6;}
+.score-pill{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;min-width:38px;text-align:center;padding:4px 8px;border-radius:8px;border:2px solid #d1fae5;background:#f0fdf4;color:#059669;}
+.score-pill.winner{border-color:#059669;background:#059669;color:#fff;}
+.dept-card{border:1.5px solid #d1fae5;border-radius:14px;padding:.75rem 1rem;background:#fff;transition:border-color .18s;}
+.dept-card:hover{border-color:#10b981;}
+.dept-card.editing{border-color:#10b981;background:#f0fdf4;}
+input[type=number]::-webkit-inner-spin-button{opacity:1;}
+</style>
+</head>
+<body>
+
+<header class="sticky top-0 z-50" style="background:rgba(240,253,244,.94);backdrop-filter:blur(12px);border-bottom:1px solid rgba(167,243,208,.5);">
+  <div class="max-w-7xl mx-auto px-4 py-2.5">
+    <div class="flex items-center justify-between gap-3 flex-wrap">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,#059669,#10b981);box-shadow:0 4px 12px rgba(16,185,129,.35);">🏸</div>
+        <div>
+          <div class="fd text-emerald-900 leading-tight" style="font-size:.95rem;font-weight:800;">Inter-Department Badminton League</div>
+          <div class="text-emerald-600" style="font-size:.58rem;letter-spacing:.1em;">IDBL TOURNAMENT PLATFORM</div>
+        </div>
+      </div>
+      <nav class="flex gap-1 flex-wrap">
+        <button class="nav-tab active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
+        <button class="nav-tab" onclick="showSection('registration',this)">👥 Registration</button>
+        <button class="nav-tab" onclick="showSection('schedule',this)">📅 Schedule</button>
+        <button class="nav-tab" onclick="showSection('standing',this)">🏆 Standing</button>
+        <button class="nav-tab" onclick="showSection('settings',this)">⚙️ Settings</button>
+        <button class="nav-tab" onclick="showSection('rules',this)">📜 Rules</button>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-5">
+
+<!-- ===== DASHBOARD ===== -->
+<section id="sec-dashboard" class="section">
+  <div class="mb-5">
+    <h2 class="fd font-bold text-emerald-900" style="font-size:1.5rem;">Tournament Dashboard</h2>
+    <p class="text-sm text-emerald-700 mt-0.5">Live overview — updated in real time.</p>
+  </div>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5" id="dashMetrics"></div>
+  <div class="grid md:grid-cols-2 gap-4 mb-4">
+    <div class="card p-5">
+      <div class="fd font-bold text-emerald-900 mb-1" style="font-size:.95rem;">Match Completion</div>
+      <div class="flex items-end gap-2 mb-2">
+        <span class="text-3xl font-bold text-emerald-600" id="dashPct">0%</span>
+        <span class="text-sm text-gray-400 mb-0.5" id="dashMC">0 / 0</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="dashPBar" style="width:0%"></div></div>
+      <p class="text-xs text-gray-400 mt-1.5">Thursday sessions · Both Beginner & Advanced courts counted</p>
+    </div>
+    <div class="card p-5">
+      <div class="fd font-bold text-emerald-900 mb-3" style="font-size:.95rem;">Current Leaders 👑</div>
+      <div id="dashLeaders"><p class="text-sm text-gray-400">No results yet.</p></div>
+    </div>
+  </div>
+  <div class="card p-5">
+    <div class="fd font-bold text-emerald-900 mb-3" style="font-size:.95rem;">Department Roster Status</div>
+    <div id="dashDeptStatus" class="grid sm:grid-cols-2 lg:grid-cols-5 gap-2"></div>
+  </div>
+</section>
+
+<!-- ===== REGISTRATION ===== -->
+<section id="sec-registration" class="section hidden">
+  <div class="mb-5">
+    <h2 class="fd font-bold text-emerald-900" style="font-size:1.5rem;">Team Registration</h2>
+    <p class="text-sm text-emerald-700 mt-0.5">Register departments, assign team managers & IDs, and roster all players.</p>
+  </div>
+
+  <div class="grid lg:grid-cols-2 gap-4 mb-5">
+    <!-- Add Department Form -->
+    <div class="card p-5">
+      <h3 class="fd font-bold text-emerald-800 mb-3" style="font-size:.92rem;">🏢 Add New Department</h3>
+      <div class="space-y-2.5">
+        <div>
+          <label class="block text-xs font-semibold text-emerald-700 mb-1">Department / Team Name</label>
+          <input type="text" id="deptInput" class="fi" placeholder="e.g. P1 Engineering">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-emerald-700 mb-1">Manager Name</label>
+            <input type="text" id="deptManager" class="fi" placeholder="Full name">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-emerald-700 mb-1">Manager ID</label>
+            <input type="text" id="deptManagerId" class="fi" placeholder="e.g. EMP-0001">
+          </div>
+        </div>
+        <button class="btn btn-p w-full" onclick="addDepartment()">+ Add Department</button>
+      </div>
+    </div>
+
+    <!-- Registered Departments List -->
+    <div class="card p-5">
+      <h3 class="fd font-bold text-emerald-800 mb-3" style="font-size:.92rem;">📋 Registered Departments <span id="deptCount" class="text-emerald-600 font-normal text-sm"></span></h3>
+      <div id="deptList" class="space-y-2 max-h-64 overflow-y-auto pr-1"></div>
+    </div>
+  </div>
+
+  <!-- Player Roster Panel -->
+  <div class="card p-5">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <h3 class="fd font-bold text-emerald-800" style="font-size:.92rem;">🏸 Player Roster Registration</h3>
+      <div class="flex items-center gap-2">
+        <label class="text-xs font-semibold text-emerald-700 whitespace-nowrap">Select Team:</label>
+        <select id="rosterDept" class="fi" style="min-width:180px;width:auto;" onchange="renderRosterPanel()">
+          <option value="">— Choose Department —</option>
+        </select>
+      </div>
+    </div>
+    <div id="rosterPanel">
+      <p class="text-sm text-gray-400 py-4 text-center">Select a department above to manage players.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCHEDULE ===== -->
+<section id="sec-schedule" class="section hidden">
+  <div class="mb-4 flex items-start justify-between flex-wrap gap-3">
+    <div>
+      <h2 class="fd font-bold text-emerald-900" style="font-size:1.5rem;">📅 Match Schedule</h2>
+      <p class="text-sm text-emerald-700 mt-0.5">Every Thursday · 6:00 PM – 9:00 PM · 30 min per match · 4 courts</p>
+    </div>
+    <div class="flex gap-2 flex-wrap">
+      <select id="weekFilter" class="fi" style="width:auto;" onchange="renderScheduleView()">
+        <option value="all">All Weeks</option>
+      </select>
+    </div>
+  </div>
+  <div class="flex gap-2 mb-4 flex-wrap">
+    <button class="itab active" onclick="showSchCat('all',this)">All Matches</button>
+    <button class="itab" onclick="showSchCat('beginner',this)">🟢 Beginner</button>
+    <button class="itab" onclick="showSchCat('advanced',this)">🔵 Advanced</button>
+    <button class="itab" onclick="showSchCat('pending',this)">⏳ Pending</button>
+    <button class="itab" onclick="showSchCat('done',this)">✅ Completed</button>
+  </div>
+  <div id="scheduleContainer"></div>
+</section>
+
+<!-- ===== STANDING ===== -->
+<section id="sec-standing" class="section hidden">
+  <div class="mb-5">
+    <h2 class="fd font-bold text-emerald-900" style="font-size:1.5rem;">Overall Standing</h2>
+    <p class="text-sm text-emerald-700 mt-0.5">Points: Win = 1 pt, Loss = 0 pt. Counted per match (each week's session = one match per category).</p>
+  </div>
+  <div class="grid lg:grid-cols-2 gap-5">
+    <div class="card p-5">
+      <h3 class="fd font-bold text-emerald-800 mb-4 flex items-center gap-2" style="font-size:.92rem;">
+        <span class="w-6 h-6 rounded-lg bg-green-100 flex items-center justify-center">🟢</span> Beginner Category
+      </h3>
+      <div id="lb-beginner"></div>
+    </div>
+    <div class="card p-5">
+      <h3 class="fd font-bold text-emerald-800 mb-4 flex items-center gap-2" style="font-size:.92rem;">
+        <span class="w-6 h-6 rounded-lg bg-blue-100 flex items-center justify-center">🔵</span> Advanced Category
+      </h3>
+      <div id="lb-advanced"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RULES ===== -->
+<section id="sec-rules" class="section hidden">
+  <div class="mb-5 flex items-start justify-between flex-wrap gap-4">
+    <div>
+      <h2 class="fd font-bold text-emerald-900" style="font-size:1.5rem;">📜 Official Tournament Rules</h2>
+      <p class="text-sm text-emerald-700 mt-0.5">Scan the QR code or share this page so every player, manager & supporter can review the rules.</p>
+    </div>
+    <div class="card p-4 flex flex-col items-center" style="min-width:170px;">
+      <div id="rulesQR" class="flex items-center justify-center" style="width:140px;height:140px;"></div>
+      <div class="text-xs font-semibold text-emerald-700 mt-2">📱 Scan to view Rules</div>
+      <button class="btn btn-s btn-xs mt-2" onclick="copyRulesLink()">🔗 Copy Link</button>
+    </div>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-4 mb-4">
+    <div class="card p-5">
+      <h3 class="fd font-bold text-emerald-800 mb-3 flex items-center gap-2" style="font-size:.95rem;">⭐ Team Formation &amp; Eligibility</h3>
+      <ul class="space-y-2.5 text-sm text-emerald-950">
+        <li><b>Department Restriction:</b> Both players in a pair must belong to the same department.</li>
+        <li><b>Open Pairings:</b> Teams can be Men's Doubles, Women's Doubles, or Mixed Doubles.</li>
+        <li><b>Unified Category:</b> There are no separate gender categories. All registered pairs will compete against each other in a single tournament pool.</li>
+        <li><b>Skill Level &amp; Category Choice:</b> This game is only for Beginner and Advanced players. If a player is too good for their category, the organizers can disqualify the pair.</li>
+        <li><b>For Women Players:</b> All women can choose to join the Beginner category. If they want to challenge themselves, they can choose to join the Advanced category. The choice is up to them.</li>
+      </ul>
+    </div>
+    <div class="card p-5">
+      <h3 class="fd font-bold text-emerald-800 mb-3 flex items-center gap-2" style="font-size:.95rem;">⭐ Team Manager Rules &amp; Responsibilities</h3>
+      <ul class="space-y-2.5 text-sm text-emerald-950">
+        <li><b>One Point of Contact:</b> Each department must have 1 Team Manager. Only the Manager can talk to the organizers about schedules, disputes, or player changes.</li>
+        <li><b>Submit Player Line-up:</b> Before every match starts, the Manager must submit the names of the 2 Beginner pairs and 2 Advanced pairs who will play. You cannot change players once the match begins.</li>
+        <li><b>Player Eligibility:</b> The Manager must make sure all their players are from the same department and are registered in the correct skill category (Beginner or Advanced).</li>
+        <li><b>Control Attendance:</b> The Manager must make sure their players are at the court on time. If a pair is 10 minutes late, that specific game is a walkover (automatic loss).</li>
+        <li><b>Keep Team Discipline:</b> Managers must ensure their players and supporters behave properly and respect the referee and opponents.</li>
+      </ul>
+    </div>
+    <div class="card p-5">
+      <h3 class="fd font-bold text-emerald-800 mb-3 flex items-center gap-2" style="font-size:.95rem;">⭐ Match &amp; Scoring</h3>
+      <ul class="space-y-2.5 text-sm text-emerald-950">
+        <li>Set 1: Point 1 to 15</li>
+        <li>Set 2: Point 16 to 30</li>
+        <li>Change side when reaching 15 points</li>
+        <li>Pair who reach 30 points first will be the winner</li>
+      </ul>
+    </div>
+    <div class="card p-5">
+      <h3 class="fd font-bold text-emerald-800 mb-3 flex items-center gap-2" style="font-size:.95rem;">⭐ Participation Limit</h3>
+      <ul class="space-y-2.5 text-sm text-emerald-950">
+        <li>There is no limit on the number of players registered in a team, but only 2 Beginner pairs and 2 Advanced pairs may participate in each match.</li>
+      </ul>
+    </div>
+    <div class="card p-5">
+      <h3 class="fd font-bold text-emerald-800 mb-3 flex items-center gap-2" style="font-size:.95rem;">⭐ Attendance</h3>
+      <ul class="space-y-2.5 text-sm text-emerald-950">
+        <li>Any pair who does not arrive within 10 minutes of scheduled time will be disqualified.</li>
+      </ul>
+    </div>
+    <div class="card p-5">
+      <h3 class="fd font-bold text-emerald-800 mb-3 flex items-center gap-2" style="font-size:.95rem;">⭐ Organizer Rights</h3>
+      <ul class="space-y-2.5 text-sm text-emerald-950">
+        <li>Rules are subject to change.</li>
+        <li>Organizer decision is final.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SETTINGS ===== -->
+<section id="sec-settings" class="section hidden">
+  <div class="mb-5">
+    <h2 class="fd font-bold text-emerald-900" style="font-size:1.5rem;">Admin Settings & Rules</h2>
+    <p class="text-sm text-emerald-700 mt-0.5">Configure tournament rules and manage platform data.</p>
+  </div>
+  <div class="grid md:grid-cols-2 gap-5">
+    <div class="card p-5">
+      <h3 class="fd font-bold text-emerald-800 mb-4" style="font-size:.92rem;">🎯 Tournament Rules</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-emerald-700 mb-1">Points to Win a Game</label>
+          <select id="settingPts" class="fi" onchange="saveSetting()">
+            <option value="30">30 Points (No Deuce)</option>
+            <option value="21">21 Points (Standard)</option>
+            <option value="15">15 Points (Short)</option>
+            <option value="custom">Custom...</option>
+          </select>
+        </div>
+        <div id="customPtsWrap" class="hidden">
+          <label class="block text-xs font-semibold text-emerald-700 mb-1">Custom Point Limit</label>
+          <input type="number" id="settingCustomPts" class="fi" min="5" max="99" value="30" onchange="saveSetting()">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-emerald-700 mb-1.5">Deuce Rule</label>
+          <div class="flex items-center gap-2">
+            <div class="toggle" id="deuceToggle" onclick="toggleDeuce()"></div>
+            <span id="deuceLabel" class="text-sm text-gray-500">Disabled</span>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-emerald-700 mb-1">Scoring System</label>
+          <select id="settingScore" class="fi" onchange="saveSetting()">
+            <option value="match_win">Match Win = 1 pt, Lose = 0 pt</option>
+            <option value="pts_diff">Points Difference</option>
+          </select>
+        </div>
+        <div class="p-3 rounded-xl" style="background:#f0fdf4;border:1px solid #d1fae5;">
+          <div class="text-xs font-semibold text-emerald-700 mb-1.5">Active Configuration</div>
+          <div id="settingSummary" class="text-sm text-emerald-900 space-y-0.5"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card p-5">
+      <h3 class="fd font-bold text-emerald-800 mb-4" style="font-size:.92rem;">🗃️ Data Management</h3>
+      <div class="space-y-3 mb-4">
+        <div class="p-4 rounded-xl border border-emerald-100 bg-emerald-50">
+          <div class="font-semibold text-emerald-800 text-sm mb-1">Load Demo Data</div>
+          <p class="text-xs text-emerald-600 mb-2">Populate with all 10 teams, managers, players & sample scores.</p>
+          <button class="btn btn-p btn-sm" onclick="loadDemoData()">🚀 Load Demo Data</button>
+        </div>
+        <div class="p-4 rounded-xl border border-red-100 bg-red-50">
+          <div class="font-semibold text-red-700 text-sm mb-1">Reset All Data</div>
+          <p class="text-xs text-red-500 mb-2">Permanently wipes all players, scores, and team edits.</p>
+          <button class="btn btn-d btn-sm" onclick="resetAll()">🗑️ Reset All</button>
+        </div>
+      </div>
+      <div class="p-3 rounded-xl border border-gray-100">
+        <div class="text-xs font-semibold text-gray-400 mb-2">Platform Statistics</div>
+        <div class="grid grid-cols-2 gap-2" id="statsGrid"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ========== MODALS ========== -->
+
+<!-- Score Modal -->
+<div class="modal-ov hidden" id="scoreModal">
+  <div class="modal-box">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="fd font-bold text-emerald-900 text-lg">Update Match Score</h3>
+      <button onclick="closeScoreModal()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
+    </div>
+    <div id="scoreMatchInfo" class="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-100 text-sm text-emerald-800 font-semibold text-center"></div>
+
+    <!-- Beginner score -->
+    <div id="scoreBegWrap" class="mb-4">
+      <div class="text-xs font-semibold text-emerald-700 mb-2 flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-green-100 text-center text-xs">🟢</span> Beginner Court Score</div>
+      <div class="flex items-center gap-3">
+        <div class="flex-1">
+          <div class="text-xs text-gray-500 mb-1 text-center" id="scoreBegTA"></div>
+          <input type="number" id="scoreBegA" class="fi text-center fd font-bold" style="font-size:1.4rem;" min="0" max="99" placeholder="0" oninput="autoDetectWinner()">
+        </div>
+        <div class="text-gray-300 font-bold text-xl">—</div>
+        <div class="flex-1">
+          <div class="text-xs text-gray-500 mb-1 text-center" id="scoreBegTB"></div>
+          <input type="number" id="scoreBegB" class="fi text-center fd font-bold" style="font-size:1.4rem;" min="0" max="99" placeholder="0" oninput="autoDetectWinner()">
+        </div>
+      </div>
+      <div class="text-xs text-center mt-1.5" id="begAutoWinner" style="color:#059669;font-weight:600;"></div>
+    </div>
+
+    <!-- Advanced score -->
+    <div id="scoreAdvWrap" class="mb-4">
+      <div class="text-xs font-semibold text-blue-700 mb-2 flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-blue-100 text-center text-xs">🔵</span> Advanced Court Score</div>
+      <div class="flex items-center gap-3">
+        <div class="flex-1">
+          <div class="text-xs text-gray-500 mb-1 text-center" id="scoreAdvTA"></div>
+          <input type="number" id="scoreAdvA" class="fi text-center fd font-bold" style="font-size:1.4rem;" min="0" max="99" placeholder="0" oninput="autoDetectWinner()">
+        </div>
+        <div class="text-gray-300 font-bold text-xl">—</div>
+        <div class="flex-1">
+          <div class="text-xs text-gray-500 mb-1 text-center" id="scoreAdvTB"></div>
+          <input type="number" id="scoreAdvB" class="fi text-center fd font-bold" style="font-size:1.4rem;" min="0" max="99" placeholder="0" oninput="autoDetectWinner()">
+        </div>
+      </div>
+      <div class="text-xs text-center mt-1.5" id="advAutoWinner" style="color:#1d4ed8;font-weight:600;"></div>
+    </div>
+
+    <div class="flex gap-2 pt-2">
+      <button class="btn btn-p flex-1" onclick="saveScore()">💾 Save Scores</button>
+      <button class="btn btn-d btn-sm" onclick="clearMatchScores()">Clear</button>
+      <button class="btn btn-s btn-sm" onclick="closeScoreModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Match Modal -->
+<div class="modal-ov hidden" id="editMatchModal">
+  <div class="modal-box">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="fd font-bold text-emerald-900 text-lg">Edit Match</h3>
+      <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 text-xl">✕</button>
+    </div>
+    <div id="editMatchInfo" class="mb-4 p-2.5 rounded-xl bg-emerald-50 border border-emerald-100 text-sm text-emerald-800 font-semibold text-center"></div>
+    <div class="space-y-3">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-emerald-700 mb-1">Time</label>
+          <input type="time" id="editTime" class="fi">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-emerald-700 mb-1">Week</label>
+          <select id="editWeek" class="fi">
+            <option value="1">Week 1</option><option value="2">Week 2</option><option value="3">Week 3</option>
+            <option value="4">Week 4</option><option value="5">Week 5</option><option value="6">Week 6</option>
+            <option value="7">Week 7</option><option value="8">Week 8</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-emerald-700 mb-1">Beginner Court Label</label>
+        <input type="text" id="editBegCourt" class="fi" placeholder="e.g. Court 1">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-emerald-700 mb-1">Advanced Court Label</label>
+        <input type="text" id="editAdvCourt" class="fi" placeholder="e.g. Court 3">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-emerald-700 mb-1">Notes / Remarks</label>
+        <input type="text" id="editNotes" class="fi" placeholder="Optional notes...">
+      </div>
+    </div>
+    <div class="flex gap-2 mt-4">
+      <button class="btn btn-p flex-1" onclick="saveMatchEdit()">Save Changes</button>
+      <button class="btn btn-d btn-sm" onclick="deleteMatch()">🗑 Delete</button>
+      <button class="btn btn-s btn-sm" onclick="closeEditModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Team Modal -->
+<div class="modal-ov hidden" id="editTeamModal">
+  <div class="modal-box" style="max-width:400px;">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="fd font-bold text-emerald-900 text-lg">Edit Department</h3>
+      <button onclick="closeEditTeam()" class="text-gray-400 hover:text-gray-600 text-xl">✕</button>
+    </div>
+    <div class="space-y-3">
+      <div>
+        <label class="block text-xs font-semibold text-emerald-700 mb-1">Department / Team Name</label>
+        <input type="text" id="editTeamName" class="fi">
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="block text-xs font-semibold text-emerald-700 mb-1">Manager Name</label>
+          <input type="text" id="editTeamManager" class="fi">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-emerald-700 mb-1">Manager ID</label>
+          <input type="text" id="editTeamManagerId" class="fi">
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-2 mt-4">
+      <button class="btn btn-p flex-1" onclick="saveTeamEdit()">Save Changes</button>
+      <button class="btn btn-s btn-sm" onclick="closeEditTeam()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-5 right-5 z-50 hidden">
+  <div id="toastMsg" class="px-4 py-2.5 rounded-xl font-semibold text-sm shadow-xl fd" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;"></div>
+</div>
+
+<script>
+// ============================================================
+// CONSTANTS & DEFAULTS
+// ============================================================
+const LS = 'idbl_v4';
+
+const TEAMS_DEFAULT = [
+  {id:1, name:'Office',                   manager:'', managerId:''},
+  {id:2, name:'Warehouse P1 x P2',        manager:'', managerId:''},
+  {id:3, name:'Facility x Automation',    manager:'', managerId:''},
+  {id:4, name:'P1 PD x QA x IE x MPM',   manager:'', managerId:''},
+  {id:5, name:'P1 Engineering',           manager:'', managerId:''},
+  {id:6, name:'P2 PD',                    manager:'', managerId:''},
+  {id:7, name:'P2 IE x NPI x MPM x FAE', manager:'', managerId:''},
+  {id:8, name:'P2 Engineering',           manager:'', managerId:''},
+  {id:9, name:'P2 QA',                    manager:'', managerId:''},
+  {id:10,name:'P2 PSE',                   manager:'', managerId:''},
+];
+
+// Match schedule — each match has:
+//  id, week, matchNum, time, begCourt, advCourt, beg:{a,b}, adv:{a,b}, notes, deleted
+// Courts default: Beginner = "Court 1", Advanced = "Court 3" (from image)
+const SCHEDULE_BASE = [
+  {id:'m1', week:1,matchNum:1, time:'18:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:1,b:2}, adv:{a:1,b:2}},
+  {id:'m2', week:1,matchNum:2, time:'18:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:3,b:4}, adv:{a:3,b:4}},
+  {id:'m3', week:1,matchNum:3, time:'19:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:1,b:3}, adv:{a:1,b:3}},
+  {id:'m4', week:1,matchNum:4, time:'19:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:2,b:4}, adv:{a:2,b:4}},
+  {id:'m5', week:1,matchNum:5, time:'20:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:1,b:4}, adv:{a:1,b:4}},
+  {id:'m6', week:1,matchNum:6, time:'20:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:2,b:3}, adv:{a:2,b:3}},
+  {id:'m7', week:2,matchNum:7, time:'18:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:5,b:6}, adv:{a:5,b:6}},
+  {id:'m8', week:2,matchNum:8, time:'18:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:7,b:8}, adv:{a:7,b:8}},
+  {id:'m9', week:2,matchNum:9, time:'19:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:5,b:7}, adv:{a:5,b:7}},
+  {id:'m10',week:2,matchNum:10,time:'19:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:6,b:8}, adv:{a:6,b:8}},
+  {id:'m11',week:2,matchNum:11,time:'20:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:5,b:8}, adv:{a:5,b:8}},
+  {id:'m12',week:2,matchNum:12,time:'20:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:6,b:7}, adv:{a:6,b:7}},
+  {id:'m13',week:3,matchNum:13,time:'18:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:1,b:9}, adv:{a:1,b:9}},
+  {id:'m14',week:3,matchNum:14,time:'18:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:2,b:10},adv:{a:2,b:10}},
+  {id:'m15',week:3,matchNum:15,time:'19:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:1,b:10},adv:{a:1,b:10}},
+  {id:'m16',week:3,matchNum:16,time:'19:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:2,b:9}, adv:{a:2,b:9}},
+  {id:'m17',week:3,matchNum:17,time:'20:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:9,b:10},adv:{a:9,b:10}},
+  {id:'m18',week:4,matchNum:18,time:'18:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:3,b:9}, adv:{a:3,b:9}},
+  {id:'m19',week:4,matchNum:19,time:'18:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:4,b:10},adv:{a:4,b:10}},
+  {id:'m20',week:4,matchNum:20,time:'19:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:5,b:9}, adv:{a:5,b:9}},
+  {id:'m21',week:4,matchNum:21,time:'19:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:3,b:10},adv:{a:3,b:10}},
+  {id:'m22',week:4,matchNum:22,time:'20:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:4,b:9}, adv:{a:4,b:9}},
+  {id:'m23',week:4,matchNum:23,time:'20:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:5,b:10},adv:{a:5,b:10}},
+  {id:'m24',week:5,matchNum:24,time:'18:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:1,b:5}, adv:{a:1,b:5}},
+  {id:'m25',week:5,matchNum:25,time:'18:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:2,b:6}, adv:{a:2,b:6}},
+  {id:'m26',week:5,matchNum:26,time:'19:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:1,b:6}, adv:{a:1,b:6}},
+  {id:'m27',week:5,matchNum:27,time:'19:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:2,b:5}, adv:{a:2,b:5}},
+  {id:'m28',week:5,matchNum:28,time:'20:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:1,b:7}, adv:{a:1,b:7}},
+  {id:'m29',week:5,matchNum:29,time:'20:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:2,b:8}, adv:{a:2,b:8}},
+  {id:'m30',week:6,matchNum:30,time:'18:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:6,b:9}, adv:{a:6,b:9}},
+  {id:'m31',week:6,matchNum:31,time:'18:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:7,b:10},adv:{a:7,b:10}},
+  {id:'m32',week:6,matchNum:32,time:'19:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:8,b:9}, adv:{a:8,b:9}},
+  {id:'m33',week:6,matchNum:33,time:'19:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:6,b:10},adv:{a:6,b:10}},
+  {id:'m34',week:6,matchNum:34,time:'20:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:7,b:9}, adv:{a:7,b:9}},
+  {id:'m35',week:6,matchNum:35,time:'20:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:8,b:10},adv:{a:8,b:10}},
+  {id:'m36',week:7,matchNum:36,time:'18:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:1,b:8}, adv:{a:1,b:8}},
+  {id:'m37',week:7,matchNum:37,time:'18:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:2,b:7}, adv:{a:2,b:7}},
+  {id:'m38',week:7,matchNum:38,time:'19:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:4,b:8}, adv:{a:4,b:8}},
+  {id:'m39',week:7,matchNum:39,time:'19:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:3,b:7}, adv:{a:3,b:7}},
+  {id:'m40',week:7,matchNum:40,time:'20:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:3,b:8}, adv:{a:3,b:8}},
+  {id:'m41',week:7,matchNum:41,time:'20:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:4,b:7}, adv:{a:4,b:7}},
+  {id:'m42',week:8,matchNum:42,time:'18:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:3,b:5}, adv:{a:3,b:5}},
+  {id:'m43',week:8,matchNum:43,time:'18:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:4,b:6}, adv:{a:4,b:6}},
+  {id:'m44',week:8,matchNum:44,time:'19:00',begCourt:'Court 1',advCourt:'Court 3',beg:{a:3,b:6}, adv:{a:3,b:6}},
+  {id:'m45',week:8,matchNum:45,time:'19:30',begCourt:'Court 1',advCourt:'Court 3',beg:{a:4,b:5}, adv:{a:4,b:5}},
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  teams: JSON.parse(JSON.stringify(TEAMS_DEFAULT)),
+  players: {},
+  scores: {},   // {matchId: {beg:{sA,sB,winner}, adv:{sA,sB,winner}}}
+  matchEdits: {}, // {matchId: {time, week, begCourt, advCourt, notes, deleted}}
+  settings: {pts:'30', deuce:false, scoreMode:'match_win'}
+};
+
+function emptyPlayers(){ return {beginner:Array(10).fill(null).map(()=>({empId:'',name:''})), advanced:Array(10).fill(null).map(()=>({empId:'',name:''}))}; }
+
+function loadState(){
+  try{
+    const s=localStorage.getItem(LS);
+    if(s){const parsed=JSON.parse(s);state={...state,...parsed};}
+    state.teams.forEach(t=>{ if(!state.players[t.id]) state.players[t.id]=emptyPlayers(); });
+  }catch(e){}
+}
+function saveState(){ localStorage.setItem(LS,JSON.stringify(state)); }
+
+// ============================================================
+// MATCH HELPERS — merged base + user edits, filter deleted
+// ============================================================
+function getMatches(){
+  return SCHEDULE_BASE.filter(m=>{
+    const ed=state.matchEdits[m.id];
+    return !ed||!ed.deleted;
+  }).map(m=>{
+    const ed=state.matchEdits[m.id]||{};
+    return {...m, ...ed, id:m.id, beg:m.beg, adv:m.adv}; // beg/adv not editable (teams fixed)
+  });
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function teamName(id){ const t=state.teams.find(t=>t.id===id); return t?t.name:'Team '+id; }
+function fmt24(t){ // "18:00" → "6:00 PM"
+  if(!t) return '';
+  const [h,m]=t.split(':');
+  const hr=parseInt(h);
+  return `${hr>12?hr-12:hr}:${m} ${hr>=12?'PM':'AM'}`;
+}
+function toast(msg,err=false){
+  const el=document.getElementById('toast'),m=document.getElementById('toastMsg');
+  m.textContent=msg;
+  m.style.background=err?'linear-gradient(135deg,#dc2626,#ef4444)':'linear-gradient(135deg,#059669,#10b981)';
+  el.classList.remove('hidden');
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.classList.add('hidden'),3000);
+}
+function autoWinner(sA,sB,tA,tB){
+  const a=parseInt(sA),b=parseInt(sB);
+  if(isNaN(a)||isNaN(b)||a===b) return null;
+  return a>b?tA:tB;
+}
+
+// ============================================================
+// NAV
+// ============================================================
+function showSection(id,btn){
+  document.querySelectorAll('[id^="sec-"]').forEach(s=>s.classList.add('hidden'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.remove('hidden');
+  if(btn) btn.classList.add('active');
+  if(history.replaceState) history.replaceState(null,'',id==='rules'?'#rules':location.pathname+location.search);
+  renderSection(id);
+}
+function renderSection(id){
+  if(id==='dashboard') renderDashboard();
+  if(id==='registration'){renderDeptList();updateRosterDropdown();renderRosterPanel();}
+  if(id==='schedule') renderScheduleView();
+  if(id==='standing') renderLeaderboards();
+  if(id==='settings'){renderSettingsUI();renderStats();}
+  if(id==='rules') renderRulesQR();
+}
+
+// ============================================================
+// RULES / QR CODE
+// ============================================================
+function getRulesUrl(){
+  return location.origin+location.pathname+'#rules';
+}
+function renderRulesQR(){
+  const el=document.getElementById('rulesQR');
+  if(!el||typeof QRCode==='undefined') return;
+  el.innerHTML='';
+  new QRCode(el,{text:getRulesUrl(),width:140,height:140,colorDark:'#059669',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+}
+function copyRulesLink(){
+  const url=getRulesUrl();
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(()=>toast('Rules link copied!')).catch(()=>prompt('Copy this link:',url));
+  } else {
+    prompt('Copy this link:',url);
+  }
+}
+
+// ============================================================
+// DEPARTMENTS
+// ============================================================
+function addDepartment(){
+  const name=document.getElementById('deptInput').value.trim();
+  const mgr=document.getElementById('deptManager').value.trim();
+  const mgrId=document.getElementById('deptManagerId').value.trim();
+  if(!name) return toast('Enter a department name',true);
+  if(state.teams.find(t=>t.name.toLowerCase()===name.toLowerCase())) return toast('Already exists',true);
+  const newId=Math.max(...state.teams.map(t=>t.id),0)+1;
+  state.teams.push({id:newId,name,manager:mgr,managerId:mgrId});
+  state.players[newId]=emptyPlayers();
+  saveState();
+  document.getElementById('deptInput').value='';
+  document.getElementById('deptManager').value='';
+  document.getElementById('deptManagerId').value='';
+  renderDeptList();updateRosterDropdown();toast('Added: '+name);
+}
+function removeDepartment(id){
+  if(!confirm('Remove this department and all its players?')) return;
+  state.teams=state.teams.filter(t=>t.id!==id);
+  delete state.players[id];
+  saveState();renderDeptList();updateRosterDropdown();renderRosterPanel();toast('Removed');
+}
+
+// Edit team modal context
+let editTeamId=null;
+function openEditTeam(id){
+  const t=state.teams.find(t=>t.id===id);
+  if(!t) return;
+  editTeamId=id;
+  document.getElementById('editTeamName').value=t.name;
+  document.getElementById('editTeamManager').value=t.manager||'';
+  document.getElementById('editTeamManagerId').value=t.managerId||'';
+  document.getElementById('editTeamModal').classList.remove('hidden');
+}
+function closeEditTeam(){ document.getElementById('editTeamModal').classList.add('hidden'); editTeamId=null; }
+function saveTeamEdit(){
+  if(!editTeamId) return;
+  const t=state.teams.find(t=>t.id===editTeamId);
+  if(!t) return;
+  t.name=document.getElementById('editTeamName').value.trim()||t.name;
+  t.manager=document.getElementById('editTeamManager').value.trim();
+  t.managerId=document.getElementById('editTeamManagerId').value.trim();
+  saveState();closeEditTeam();renderDeptList();updateRosterDropdown();toast('Team updated');
+}
+
+function renderDeptList(){
+  const el=document.getElementById('deptList');
+  document.getElementById('deptCount').textContent=`(${state.teams.length})`;
+  if(!state.teams.length){el.innerHTML='<p class="text-sm text-gray-400">No teams yet.</p>';return;}
+  el.innerHTML=state.teams.map(t=>{
+    const p=state.players[t.id]||{beginner:[],advanced:[]};
+    const bF=p.beginner.filter(x=>x&&x.name).length;
+    const aF=p.advanced.filter(x=>x&&x.name).length;
+    const ok=bF>=4&&aF>=4;
+    return `<div class="dept-card">
+      <div class="flex items-start justify-between gap-2">
+        <div style="min-width:0;flex:1;">
+          <div class="fd font-bold text-sm text-emerald-900">T${t.id}: ${t.name}</div>
+          <div class="text-xs mt-0.5" style="color:#6b7280;">
+            👤 ${t.manager||'<span style="color:#d1d5db;">No manager</span>'} 
+            ${t.managerId?`<span class="ml-1 font-mono" style="color:#9ca3af;">(${t.managerId})</span>`:''}
+          </div>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="text-xs ${bF>=4?'text-green-600':'text-amber-600'}">🟢 ${bF}/10</span>
+            <span class="text-xs ${aF>=4?'text-green-600':'text-amber-600'}">🔵 ${aF}/10</span>
+            ${ok?'<span class="badge-ok">✓ Ready</span>':'<span class="badge-w">⚠️ Incomplete</span>'}
+          </div>
+        </div>
+        <div class="flex gap-1 flex-shrink-0">
+          <button onclick="openEditTeam(${t.id})" class="btn btn-s btn-xs">✏️ Edit</button>
+          <button onclick="removeDepartment(${t.id})" class="btn btn-d btn-xs">×</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function updateRosterDropdown(){
+  const sel=document.getElementById('rosterDept');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">— Choose Department —</option>'+state.teams.map(t=>`<option value="${t.id}"${t.id==cur?' selected':''}>${t.name}</option>`).join('');
+}
+
+// ============================================================
+// ROSTER PANEL
+// ============================================================
+function renderRosterPanel(){
+  const deptId=parseInt(document.getElementById('rosterDept').value);
+  const el=document.getElementById('rosterPanel');
+  if(!deptId){el.innerHTML='<p class="text-sm text-gray-400 py-4 text-center">Select a department above to manage players.</p>';return;}
+  const team=state.teams.find(t=>t.id===deptId);
+  if(!team) return;
+  const p=state.players[deptId]||emptyPlayers();
+
+  function slotsHTML(cat){
+    const color=cat==='beginner'?'green':'blue';
+    return p[cat].map((pl,i)=>{
+      const isMust=i<4,isSub=i>=4;
+      const filled=pl&&pl.name;
+      return `<div class="player-slot ${filled?'filled':''} ${isSub?'sub-slot':''}">
+        <span class="slot-lbl ${isSub?'sub':'must'}">${isSub?'S'+(i-3):'P'+(i+1)}</span>
+        <input type="text" value="${pl?escHtml(pl.empId):''}" placeholder="Emp ID"
+          class="fi fi-sm" style="width:85px;flex-shrink:0;"
+          onchange="updatePlayer(${deptId},'${cat}',${i},'empId',this.value)">
+        <input type="text" value="${pl?escHtml(pl.name):''}"
+          placeholder="${isMust?'Name (required)':'Substitute name'}"
+          class="fi fi-sm" style="flex:1;"
+          onchange="updatePlayer(${deptId},'${cat}',${i},'name',this.value)">
+        ${filled?`<span class="${isSub?'badge-sub':'badge-ok'}" style="flex-shrink:0;">${isSub?'Sub':'✓'}</span>`:''}
+      </div>`;
+    }).join('');
+  }
+
+  const bF=p.beginner.filter(x=>x&&x.name).length;
+  const aF=p.advanced.filter(x=>x&&x.name).length;
+  el.innerHTML=`
+    <div class="flex items-center gap-3 mb-4 flex-wrap">
+      <div class="fd font-bold text-emerald-900" style="font-size:1.05rem;">T${team.id}: ${team.name}</div>
+      ${team.manager?`<span class="badge-ok">👤 ${team.manager}${team.managerId?' ('+team.managerId+')':''}</span>`:'<span class="badge-w">No manager</span>'}
+    </div>
+    <p class="text-xs text-gray-400 mb-4">P1–P4 = required (min 4) · S1–S6 = substitutes</p>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <div class="flex items-center gap-2 mb-2.5">
+          <span class="text-sm">🟢</span>
+          <span class="fd font-bold text-emerald-800" style="font-size:.88rem;">Beginner</span>
+          <span class="${bF>=4?'badge-ok':'badge-w'}">${bF}/10 ${bF>=4?'✓':'incomplete'}</span>
+        </div>
+        <div class="space-y-1.5">${slotsHTML('beginner')}</div>
+      </div>
+      <div>
+        <div class="flex items-center gap-2 mb-2.5">
+          <span class="text-sm">🔵</span>
+          <span class="fd font-bold text-blue-800" style="font-size:.88rem;">Advanced</span>
+          <span class="${aF>=4?'badge-ok':'badge-w'}">${aF}/10 ${aF>=4?'✓':'incomplete'}</span>
+        </div>
+        <div class="space-y-1.5">${slotsHTML('advanced')}</div>
+      </div>
+    </div>`;
+}
+
+function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+function updatePlayer(teamId,cat,idx,field,val){
+  if(!state.players[teamId]) state.players[teamId]=emptyPlayers();
+  if(!state.players[teamId][cat][idx]) state.players[teamId][cat][idx]={empId:'',name:''};
+  state.players[teamId][cat][idx][field]=val;
+  saveState();renderDeptList();
+}
+
+// ============================================================
+// SCHEDULE VIEW
+// ============================================================
+let schCatFilter='all';
+function showSchCat(cat,btn){
+  schCatFilter=cat;
+  document.querySelectorAll('#sec-schedule .itab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderScheduleView();
+}
+
+function renderScheduleView(){
+  const wf=document.getElementById('weekFilter');
+  if(wf.options.length===1){
+    for(let w=1;w<=8;w++) wf.innerHTML+=`<option value="${w}">Week ${w}</option>`;
+  }
+  const wkSel=wf.value==='all'?null:parseInt(wf.value);
+  const el=document.getElementById('scheduleContainer');
+  const allMatches=getMatches();
+  const weeks=wkSel?[wkSel]:[1,2,3,4,5,6,7,8];
+  let html='';
+
+  weeks.forEach(wk=>{
+    const wkMatches=allMatches.filter(m=>m.week===wk);
+    if(!wkMatches.length) return;
+
+    // filter by category/status
+    const visible=wkMatches.filter(m=>{
+      const sc=state.scores[m.id]||{};
+      const bDone=sc.beg&&sc.beg.winner!=null;
+      const aDone=sc.adv&&sc.adv.winner!=null;
+      const allDone=bDone&&aDone;
+      const anyDone=bDone||aDone;
+      if(schCatFilter==='beginner') return true;
+      if(schCatFilter==='advanced') return true;
+      if(schCatFilter==='pending') return !allDone;
+      if(schCatFilter==='done') return allDone;
+      return true;
+    });
+    if(!visible.length) return;
+
+    const wkDone=wkMatches.filter(m=>{const sc=state.scores[m.id]||{};return sc.beg&&sc.beg.winner!=null&&sc.adv&&sc.adv.winner!=null;}).length;
+    html+=`<div class="wk-hdr mb-3 flex items-center justify-between">
+      <span>📅 Week ${wk}</span>
+      <span style="opacity:.85;font-size:.78rem;">${wkDone}/${wkMatches.length} done</span>
+    </div>`;
+
+    visible.forEach(m=>{
+      const sc=state.scores[m.id]||{};
+      const bSc=sc.beg;
+      const aSc=sc.adv;
+      const bDone=bSc&&bSc.winner!=null;
+      const aDone=aSc&&aSc.winner!=null;
+      const allDone=bDone&&aDone;
+      const partDone=(bDone||aDone)&&!allDone;
+
+      // beginner row
+      let begRow='';
+      if(schCatFilter!=='advanced'){
+        const wA=bSc&&bSc.winner===m.beg.a;
+        const wB=bSc&&bSc.winner===m.beg.b;
+        begRow=`<div class="flex items-center gap-2 flex-wrap">
+          <span class="court-lbl c-b1">${m.begCourt||'Court 1'} · BEG</span>
+          <span class="font-semibold text-sm ${wA?'text-emerald-700':''}" style="min-width:0;">${teamName(m.beg.a)}</span>
+          ${bDone?`<span class="score-pill ${wA?'winner':''}">${bSc.sA??'?'}</span>`:''}
+          <span class="text-gray-300 text-xs font-bold">vs</span>
+          ${bDone?`<span class="score-pill ${wB?'winner':''}">${bSc.sB??'?'}</span>`:''}
+          <span class="font-semibold text-sm ${wB?'text-emerald-700':''}">${teamName(m.beg.b)}</span>
+          ${bDone?`<span class="badge-ok" style="margin-left:2px;">✓ ${teamName(bSc.winner)}</span>`:'<span class="badge-w">Pending</span>'}
+        </div>`;
+      }
+
+      // advanced row
+      let advRow='';
+      if(schCatFilter!=='beginner'){
+        const wA=aSc&&aSc.winner===m.adv.a;
+        const wB=aSc&&aSc.winner===m.adv.b;
+        advRow=`<div class="flex items-center gap-2 flex-wrap ${begRow?'mt-1.5':''}">
+          <span class="court-lbl c-a1">${m.advCourt||'Court 3'} · ADV</span>
+          <span class="font-semibold text-sm ${wA?'text-blue-700':''}">${teamName(m.adv.a)}</span>
+          ${aDone?`<span class="score-pill ${wA?'winner':''}" style="${wA?'background:#1d4ed8;border-color:#1d4ed8;':''}">${aSc.sA??'?'}</span>`:''}
+          <span class="text-gray-300 text-xs font-bold">vs</span>
+          ${aDone?`<span class="score-pill ${wB?'winner':''}" style="${wB?'background:#1d4ed8;border-color:#1d4ed8;':''}">${aSc.sB??'?'}</span>`:''}
+          <span class="font-semibold text-sm ${wB?'text-blue-700':''}">${teamName(m.adv.b)}</span>
+          ${aDone?`<span class="badge-ok" style="margin-left:2px;">✓ ${teamName(aSc.winner)}</span>`:'<span class="badge-w">Pending</span>'}
+        </div>`;
+      }
+
+      html+=`<div class="match-card mb-2 ${allDone?'done':partDone?'partial':''}">
+        <div class="flex items-center justify-between gap-2 mb-2 flex-wrap">
+          <div class="flex items-center gap-2">
+            <span class="text-xs fd font-bold text-gray-400">#${m.matchNum}</span>
+            <span class="text-xs font-semibold text-emerald-600">🕕 ${fmt24(m.time)}</span>
+            ${m.notes?`<span class="text-xs text-gray-400 italic">${m.notes}</span>`:''}
+            ${allDone?'<span class="badge-ok">✅ Done</span>':partDone?'<span class="badge-w">⏳ Partial</span>':''}
+          </div>
+          <div class="flex gap-1.5">
+            <button class="btn btn-p btn-xs" onclick="openScoreModal('${m.id}')">✏️ Score</button>
+            <button class="btn btn-w btn-xs" onclick="openEditModal('${m.id}')">⚙️ Edit</button>
+          </div>
+        </div>
+        ${begRow}${advRow}
+      </div>`;
+    });
+    html+='<div class="mb-5"></div>';
+  });
+
+  el.innerHTML=html||'<div class="card p-8 text-center text-gray-400 text-sm">No matches for this filter.</div>';
+}
+
+// ============================================================
+// SCORE MODAL
+// ============================================================
+let scoreCtx=null;
+function openScoreModal(matchId){
+  const m=getMatches().find(x=>x.id===matchId);
+  if(!m) return;
+  scoreCtx=m;
+  document.getElementById('scoreMatchInfo').textContent=`Match #${m.matchNum} · ${fmt24(m.time)} · Wk ${m.week}`;
+  document.getElementById('scoreBegTA').textContent=teamName(m.beg.a);
+  document.getElementById('scoreBegTB').textContent=teamName(m.beg.b);
+  document.getElementById('scoreAdvTA').textContent=teamName(m.adv.a);
+  document.getElementById('scoreAdvTB').textContent=teamName(m.adv.b);
+
+  const sc=state.scores[matchId]||{};
+  document.getElementById('scoreBegA').value=sc.beg?.sA??'';
+  document.getElementById('scoreBegB').value=sc.beg?.sB??'';
+  document.getElementById('scoreAdvA').value=sc.adv?.sA??'';
+  document.getElementById('scoreAdvB').value=sc.adv?.sB??'';
+  autoDetectWinner();
+  document.getElementById('scoreModal').classList.remove('hidden');
+}
+function closeScoreModal(){ document.getElementById('scoreModal').classList.add('hidden'); scoreCtx=null; }
+
+function autoDetectWinner(){
+  if(!scoreCtx) return;
+  const m=scoreCtx;
+  // Beginner
+  const bA=document.getElementById('scoreBegA').value;
+  const bB=document.getElementById('scoreBegB').value;
+  const bW=autoWinner(bA,bB,m.beg.a,m.beg.b);
+  const bEl=document.getElementById('begAutoWinner');
+  bEl.textContent=bW!=null?'🏆 Winner: '+teamName(bW):'Enter scores to auto-detect winner';
+
+  // Advanced
+  const aA=document.getElementById('scoreAdvA').value;
+  const aB=document.getElementById('scoreAdvB').value;
+  const aW=autoWinner(aA,aB,m.adv.a,m.adv.b);
+  const aEl=document.getElementById('advAutoWinner');
+  aEl.textContent=aW!=null?'🏆 Winner: '+teamName(aW):'Enter scores to auto-detect winner';
+}
+
+function saveScore(){
+  if(!scoreCtx) return;
+  const m=scoreCtx;
+  const bA=document.getElementById('scoreBegA').value;
+  const bB=document.getElementById('scoreBegB').value;
+  const aA=document.getElementById('scoreAdvA').value;
+  const aB=document.getElementById('scoreAdvB').value;
+
+  if((bA===''&&bB==='')||(aA===''&&aB==='')) return toast('Enter at least one score',true);
+
+  const bW=autoWinner(bA,bB,m.beg.a,m.beg.b);
+  const aW=autoWinner(aA,aB,m.adv.a,m.adv.b);
+
+  if(!state.scores[m.id]) state.scores[m.id]={};
+  if(bA!==''||bB!=='') state.scores[m.id].beg={sA:bA,sB:bB,winner:bW};
+  if(aA!==''||aB!=='') state.scores[m.id].adv={sA:aA,sB:aB,winner:aW};
+
+  saveState();closeScoreModal();renderScheduleView();toast('Scores saved!');
+}
+
+function clearMatchScores(){
+  if(!scoreCtx||!confirm('Clear scores for this match?')) return;
+  delete state.scores[scoreCtx.id];
+  saveState();closeScoreModal();renderScheduleView();toast('Scores cleared');
+}
+
+// ============================================================
+// EDIT MATCH MODAL
+// ============================================================
+let editMatchId=null;
+function openEditModal(matchId){
+  const m=getMatches().find(x=>x.id===matchId);
+  if(!m) return;
+  editMatchId=matchId;
+  document.getElementById('editMatchInfo').textContent=`Match #${m.matchNum}: ${teamName(m.beg.a)} vs ${teamName(m.beg.b)}`;
+  document.getElementById('editTime').value=m.time||'18:00';
+  document.getElementById('editWeek').value=m.week;
+  document.getElementById('editBegCourt').value=m.begCourt||'Court 1';
+  document.getElementById('editAdvCourt').value=m.advCourt||'Court 3';
+  document.getElementById('editNotes').value=m.notes||'';
+  document.getElementById('editMatchModal').classList.remove('hidden');
+}
+function closeEditModal(){ document.getElementById('editMatchModal').classList.add('hidden'); editMatchId=null; }
+function saveMatchEdit(){
+  if(!editMatchId) return;
+  if(!state.matchEdits[editMatchId]) state.matchEdits[editMatchId]={};
+  state.matchEdits[editMatchId].time=document.getElementById('editTime').value;
+  state.matchEdits[editMatchId].week=parseInt(document.getElementById('editWeek').value);
+  state.matchEdits[editMatchId].begCourt=document.getElementById('editBegCourt').value.trim();
+  state.matchEdits[editMatchId].advCourt=document.getElementById('editAdvCourt').value.trim();
+  state.matchEdits[editMatchId].notes=document.getElementById('editNotes').value.trim();
+  saveState();closeEditModal();renderScheduleView();toast('Match updated');
+}
+function deleteMatch(){
+  if(!editMatchId||!confirm('Remove this match from schedule?')) return;
+  if(!state.matchEdits[editMatchId]) state.matchEdits[editMatchId]={};
+  state.matchEdits[editMatchId].deleted=true;
+  saveState();closeEditModal();renderScheduleView();toast('Match removed');
+}
+
+// ============================================================
+// LEADERBOARD — points counted per match (beg & adv separate)
+// ============================================================
+function computeStandings(cat){
+  // cat = 'beg' | 'adv'
+  const table={};
+  state.teams.forEach(t=>{ table[t.id]={name:t.name,id:t.id,played:0,wins:0,losses:0,ptsFor:0,ptsAgainst:0,points:0}; });
+
+  getMatches().forEach(m=>{
+    const sc=(state.scores[m.id]||{})[cat];
+    if(!sc||sc.winner==null) return;
+    const tA=cat==='beg'?m.beg.a:m.adv.a;
+    const tB=cat==='beg'?m.beg.b:m.adv.b;
+    [tA,tB].forEach(id=>{ if(!table[id]) table[id]={name:teamName(id),id,played:0,wins:0,losses:0,ptsFor:0,ptsAgainst:0,points:0}; });
+    table[tA].played++; table[tB].played++;
+    table[tA].ptsFor+=parseInt(sc.sA)||0; table[tA].ptsAgainst+=parseInt(sc.sB)||0;
+    table[tB].ptsFor+=parseInt(sc.sB)||0; table[tB].ptsAgainst+=parseInt(sc.sA)||0;
+    if(sc.winner===tA){ table[tA].wins++;table[tA].points+=1;table[tB].losses++; }
+    else if(sc.winner===tB){ table[tB].wins++;table[tB].points+=1;table[tA].losses++; }
+  });
+  return Object.values(table).sort((a,b)=>b.points-a.points||(b.ptsFor-b.ptsAgainst)-(a.ptsFor-a.ptsAgainst)||b.wins-a.wins);
+}
+
+function renderLeaderboard(cat,elId){
+  const el=document.getElementById(elId);
+  const rows=computeStandings(cat);
+  if(!rows.length){el.innerHTML='<p class="text-sm text-gray-400">No data yet.</p>';return;}
+  const medals=['🥇','🥈','🥉'];
+  const cls=['lb1','lb2','lb3','lbn'];
+  el.innerHTML=`<div class="grid text-xs fd font-semibold text-gray-400 uppercase tracking-wide px-2 mb-2"
+    style="grid-template-columns:34px 1fr 34px 34px 34px 52px 40px;">
+    <div>#</div><div>Team</div><div class="text-center">P</div><div class="text-center">W</div>
+    <div class="text-center">L</div><div class="text-center">+/−</div><div class="text-center">Pts</div>
+  </div><div class="space-y-1.5">${rows.map((r,i)=>{
+    const ri=Math.min(i,3);
+    const medal=i<3?medals[i]:`<span style="color:#9ca3af;">${i+1}</span>`;
+    const diff=r.ptsFor-r.ptsAgainst;
+    return `<div class="${cls[ri]} grid items-center" style="grid-template-columns:34px 1fr 34px 34px 34px 52px 40px;">
+      <div class="fd font-bold">${medal}</div>
+      <div class="fd font-semibold text-sm truncate">${r.name}</div>
+      <div class="text-center text-gray-500 text-xs">${r.played}</div>
+      <div class="text-center font-bold text-emerald-600 text-xs">${r.wins}</div>
+      <div class="text-center text-red-400 text-xs">${r.losses}</div>
+      <div class="text-center text-xs ${diff>=0?'text-emerald-600':'text-red-400'}">${diff>0?'+':''}${diff}</div>
+      <div class="text-center font-bold text-emerald-800">${r.points}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+function renderLeaderboards(){ renderLeaderboard('beg','lb-beginner'); renderLeaderboard('adv','lb-advanced'); }
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard(){
+  const allM=getMatches();
+  const done=allM.filter(m=>{ const sc=state.scores[m.id]||{}; return sc.beg&&sc.beg.winner!=null&&sc.adv&&sc.adv.winner!=null; }).length;
+  const pct=allM.length?Math.round(done/allM.length*100):0;
+  document.getElementById('dashPct').textContent=pct+'%';
+  document.getElementById('dashMC').textContent=`${done} / ${allM.length} sessions`;
+  document.getElementById('dashPBar').style.width=pct+'%';
+
+  const bTotal=Object.values(state.players).reduce((s,p)=>s+(p.beginner||[]).filter(x=>x&&x.name).length,0);
+  const aTotal=Object.values(state.players).reduce((s,p)=>s+(p.advanced||[]).filter(x=>x&&x.name).length,0);
+
+  document.getElementById('dashMetrics').innerHTML=[
+    {label:'Teams',val:state.teams.length,icon:'🏢',c:'g',sub:'registered'},
+    {label:'Beginner Players',val:bTotal,icon:'🟢',c:'m',sub:'total registered'},
+    {label:'Advanced Players',val:aTotal,icon:'🔵',c:'t',sub:'total registered'},
+    {label:'Sessions Done',val:done,icon:'✅',c:'l',sub:`of ${allM.length} total`},
+  ].map(x=>`<div class="metric-card ${x.c}">
+    <div class="text-2xl mb-1.5">${x.icon}</div>
+    <div class="text-3xl font-bold text-emerald-800 fd">${x.val}</div>
+    <div class="text-sm font-semibold text-emerald-700 mt-0.5">${x.label}</div>
+    <div class="text-xs text-gray-400">${x.sub}</div>
+  </div>`).join('');
+
+  const bRows=computeStandings('beg');
+  const aRows=computeStandings('adv');
+  const bTop=bRows.find(r=>r.played>0);
+  const aTop=aRows.find(r=>r.played>0);
+  const lEl=document.getElementById('dashLeaders');
+  if(!bTop&&!aTop){lEl.innerHTML='<p class="text-sm text-gray-400">No match results yet.</p>';return;}
+  lEl.innerHTML=[
+    bTop&&`<div class="flex items-center gap-2 p-2.5 rounded-xl bg-green-50 border border-green-100">
+      <span class="text-xl">🥇</span>
+      <div><div class="text-xs text-gray-400">Beginner Leader</div><div class="font-bold text-emerald-800 text-sm">${bTop.name}</div></div>
+      <div class="ml-auto text-sm font-bold text-emerald-600">${bTop.points} pts</div>
+    </div>`,
+    aTop&&`<div class="flex items-center gap-2 p-2.5 rounded-xl bg-blue-50 border border-blue-100">
+      <span class="text-xl">🥇</span>
+      <div><div class="text-xs text-gray-400">Advanced Leader</div><div class="font-bold text-blue-800 text-sm">${aTop.name}</div></div>
+      <div class="ml-auto text-sm font-bold text-blue-600">${aTop.points} pts</div>
+    </div>`
+  ].filter(Boolean).join('');
+
+  const dEl=document.getElementById('dashDeptStatus');
+  if(!state.teams.length){dEl.innerHTML='<p class="text-sm text-gray-400 col-span-5">No teams registered.</p>';return;}
+  dEl.innerHTML=state.teams.map(t=>{
+    const p=state.players[t.id]||{beginner:[],advanced:[]};
+    const b=(p.beginner||[]).filter(x=>x&&x.name).length;
+    const a=(p.advanced||[]).filter(x=>x&&x.name).length;
+    const ok=b>=4&&a>=4;
+    return `<div class="flex items-center justify-between p-2.5 rounded-xl border ${ok?'border-green-100 bg-green-50':'border-amber-100 bg-amber-50'}">
+      <div style="min-width:0;flex:1;">
+        <div class="fd font-semibold text-xs truncate">T${t.id}: ${t.name}</div>
+        <div class="text-xs text-gray-500">🟢${b} 🔵${a}</div>
+        ${t.manager?`<div class="text-xs" style="color:#9ca3af;">👤${t.manager}</div>`:''}
+      </div>
+      ${ok?'<span class="badge-ok ml-1">✓</span>':'<span class="badge-w ml-1">⚠️</span>'}
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// SETTINGS
+// ============================================================
+function renderSettingsUI(){
+  document.getElementById('settingPts').value=['30','21','15'].includes(String(state.settings.pts))?String(state.settings.pts):'custom';
+  document.getElementById('settingScore').value=state.settings.scoreMode;
+  if(!['30','21','15'].includes(String(state.settings.pts))){
+    document.getElementById('customPtsWrap').classList.remove('hidden');
+    document.getElementById('settingCustomPts').value=state.settings.pts;
+  }
+  const tog=document.getElementById('deuceToggle');
+  tog.classList.toggle('on',state.settings.deuce);
+  document.getElementById('deuceLabel').textContent=state.settings.deuce?'Enabled':'Disabled';
+  renderSettingSummary();
+}
+function saveSetting(){
+  const ptsVal=document.getElementById('settingPts').value;
+  if(ptsVal==='custom'){
+    document.getElementById('customPtsWrap').classList.remove('hidden');
+    state.settings.pts=parseInt(document.getElementById('settingCustomPts').value)||30;
+  } else {
+    document.getElementById('customPtsWrap').classList.add('hidden');
+    state.settings.pts=parseInt(ptsVal);
+  }
+  state.settings.scoreMode=document.getElementById('settingScore').value;
+  saveState();renderSettingSummary();toast('Settings saved');
+}
+function toggleDeuce(){
+  state.settings.deuce=!state.settings.deuce;
+  saveState();renderSettingsUI();
+}
+function renderSettingSummary(){
+  const s=state.settings;
+  document.getElementById('settingSummary').innerHTML=`
+    <div>📌 Points to win: ${s.pts} pts${s.deuce?' (deuce on)':' (no deuce)'}</div>
+    <div>📌 Scoring: ${s.scoreMode==='match_win'?'Win = 1 pt, Loss = 0 pt':'Points difference'}</div>
+    <div>📌 Standing: Per match per category (Beg & Adv counted separately)</div>`;
+}
+function renderStats(){
+  const allM=getMatches();
+  const done=allM.filter(m=>{const sc=state.scores[m.id]||{};return sc.beg&&sc.beg.winner!=null;}).length;
+  const del=SCHEDULE_BASE.filter(m=>(state.matchEdits[m.id]||{}).deleted).length;
+  [['Teams',state.teams.length],['Beg. Players',Object.values(state.players).reduce((s,p)=>s+(p.beginner||[]).filter(x=>x&&x.name).length,0)],
+   ['Adv. Players',Object.values(state.players).reduce((s,p)=>s+(p.advanced||[]).filter(x=>x&&x.name).length,0)],
+   ['Total Matches',allM.length],['Beg. Done',done],['Deleted',del]]
+  .forEach(([k,v])=>{});
+  document.getElementById('statsGrid').innerHTML=[
+    ['Teams',state.teams.length],
+    ['Beg Players',Object.values(state.players).reduce((s,p)=>s+(p.beginner||[]).filter(x=>x&&x.name).length,0)],
+    ['Adv Players',Object.values(state.players).reduce((s,p)=>s+(p.advanced||[]).filter(x=>x&&x.name).length,0)],
+    ['Matches',allM.length],
+    ['Beg Done',done],
+    ['Deleted',SCHEDULE_BASE.filter(m=>(state.matchEdits[m.id]||{}).deleted).length],
+  ].map(([k,v])=>`<div class="p-2 rounded-lg bg-gray-50 border border-gray-100">
+    <div class="text-xs text-gray-400">${k}</div>
+    <div class="font-bold text-gray-700 text-lg fd">${v}</div>
+  </div>`).join('');
+}
+
+// ============================================================
+// DEMO DATA
+// ============================================================
+function loadDemoData(){
+  if(!confirm('Load demo data? This replaces current data.')) return;
+  state.teams=JSON.parse(JSON.stringify(TEAMS_DEFAULT));
+  const managers=[['Ahmad Fauzi','EMP-0010'],['Siti Rahmah','EMP-0020'],['Raj Kumar','EMP-0030'],
+    ['Lee Wei Kang','EMP-0040'],['Nurul Ain','EMP-0050'],['David Tan','EMP-0060'],
+    ['Muhammad Hafiz','EMP-0070'],['Priya Nair','EMP-0080'],['Lim Chee Weng','EMP-0090'],['Farah Hana','EMP-0100']];
+  state.teams.forEach((t,i)=>{ t.manager=managers[i][0]; t.managerId=managers[i][1]; });
+
+  const fn=['Ali','Budi','Citra','Dini','Eko','Faiz','Guna','Hana','Ira','Jaya','Kaka','Lina','Mika','Nora','Omar','Pita'];
+  const ln=['bin Zain','binti Said','Kumar','Chong','bin Hasim','binti Aziz','Tan','Singh','Lee','Patel'];
+  let emp=101;
+  state.players={};
+  state.teams.forEach(t=>{
+    state.players[t.id]=emptyPlayers();
+    ['beginner','advanced'].forEach(cat=>{
+      for(let i=0;i<10;i++){
+        const f=fn[Math.floor(Math.random()*fn.length)];
+        const l=ln[Math.floor(Math.random()*ln.length)];
+        state.players[t.id][cat][i]={empId:`EMP-${String(emp++).padStart(4,'0')}`,name:i<4?`${f} ${l}`:''};
+      }
+    });
+  });
+
+  // Scores for weeks 1–4
+  state.scores={};
+  getMatches().filter(m=>m.week<=4).forEach(m=>{
+    const bA=Math.floor(Math.random()*8)+22, bB=Math.floor(Math.random()*18)+5;
+    const aA=Math.floor(Math.random()*8)+22, aB=Math.floor(Math.random()*18)+5;
+    state.scores[m.id]={
+      beg:{sA:bA,sB:bB,winner:bA>bB?m.beg.a:m.beg.b},
+      adv:{sA:aA,sB:aB,winner:aA>aB?m.adv.a:m.adv.b}
+    };
+  });
+  state.settings={pts:30,deuce:false,scoreMode:'match_win'};
+  state.matchEdits={};
+  saveState();renderSection('dashboard');toast('Demo data loaded — Weeks 1–4 scored!');
+}
+
+function resetAll(){
+  if(!confirm('Reset ALL data? Cannot be undone.')) return;
+  state={teams:JSON.parse(JSON.stringify(TEAMS_DEFAULT)),players:{},scores:{},matchEdits:{},settings:{pts:30,deuce:false,scoreMode:'match_win'}};
+  state.teams.forEach(t=>{ state.players[t.id]=emptyPlayers(); });
+  saveState();renderSection('dashboard');toast('All data reset.');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+loadState();
+state.teams.forEach(t=>{ if(!state.players[t.id]) state.players[t.id]=emptyPlayers(); });
+if(!state.matchEdits) state.matchEdits={};
+renderDashboard();
+if(location.hash==='#rules'){
+  const rulesBtn=document.querySelector('.nav-tab[onclick*="rules"]');
+  showSection('rules',rulesBtn);
+}
+</script>
+</body>
+</html>
